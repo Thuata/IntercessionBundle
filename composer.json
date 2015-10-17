@@ -1,0 +1,29 @@
+{
+    "name": "thuata/componentbundle",
+    "license": "MIT",
+    "type": "symfony-bundle",
+    "description": "Interfaces and associated traits, helpers and tools for symfony",
+    "authors": [
+        {
+            "name": "Anthony Maudry",
+            "email": "anthony.maudry@thuata.com",
+            "homepage": "http://www.thuata.com/"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "Thuata\\ComponentBundle\\": "" }
+    },
+    "require": {
+        "php": ">=5.5",
+        "symfony/symfony": "2.7.*",
+        "incenteev/composer-parameter-handler": "~2.0"
+    },
+    "require-dev": {
+        "sensio/generator-bundle": "~2.3"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "master"
+        }
+    }
+}
