@@ -1,5 +1,5 @@
 {
-    "name": "thuata/componentbundle",
+    "name": "thuata/intercessionbundle",
     "license": "MIT",
     "type": "symfony-bundle",
     "description": "Interfaces and associated traits, helpers and tools for symfony",
@@ -11,11 +11,12 @@
         }
     ],
     "autoload": {
-        "psr-4": { "Thuata\\ComponentBundle\\": "" }
+        "psr-4": { "Thuata\\IntercessionBundle\\": "" }
     },
     "require": {
         "php": ">=5.5",
         "symfony/symfony": "2.7.*",
+        "thuata/componentBundle" : "dev-master",
         "incenteev/composer-parameter-handler": "~2.0"
     },
     "require-dev": {
@@ -25,5 +26,11 @@
         "branch-alias": {
             "dev-master": "master"
         }
-    }
+    },
+    "repositories" : [
+        {
+            "type" : "git",
+            "url" : "git@github.com:Thuata/ComponentBundle.git"
+        }
+    ]
 }
