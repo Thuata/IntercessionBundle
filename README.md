@@ -1,2 +1,2 @@
 # ComponentBundle
-Provides some interfaces and associated traits, helpers and tools
+Provides tools to generate and edit classes on execution.
