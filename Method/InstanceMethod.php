@@ -55,10 +55,14 @@ class InstanceMethod
         $this->closure = $closure;
     }
 
+    /**
+     * Invokes a method
+     * 
+     * @param type $obj
+     * @param array $args
+     */
     public function invoke($obj, array $args)
     {
         $this->closure->bindTo($obj, $obj);
-        $this->closure->
     }
-
 }
