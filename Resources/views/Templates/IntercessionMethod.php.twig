@@ -1,0 +1,28 @@
+{% if method.description or method.parameters | length > 0 or method.typeReturned %}
+/**
+{% if method.description %}
+     * {{ method.description | split("\n") | join('\n     * ') }}
+{% if method.parameters | length > 0 or method.typeReturned %}
+     *
+{% endif %}
+{% endif %}
+{% if method.parameters | length > 0 %}
+{% for parameter in method.parameters %}
+     * @param {% if parameter.type %}{{ parameter.type }} {% endif %}${{ parameter.name }}
+{% endfor %}
+{% if method.typeReturned %}
+     *
+{% endif %}
+{% endif %}
+{% if method.typeReturned %}
+     * @return {{ method.typeReturned }}
+{% endif %}
+     */
+    {% endif %}
+{% if method.visibility %}{{ method.visibility }} function {% endif %}{{ method.name }}({{ include('ThuataIntercessionBundle:Templates/IntercessionMethod:parameters.php.twig') }})
+    {{ '{' }}{% if method.body %}
+
+        {{ method.body | split("\n") | join('\n        ') | raw }}
+    {{ '}' }}{% else %}
+
+    }{% endif %}

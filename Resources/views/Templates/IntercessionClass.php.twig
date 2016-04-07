@@ -1,0 +1,51 @@
+{{ '<?php' }}
+/*
+    Created by the Thuata's Intercession bundle.
+    see https://github.com/Thuata/IntercessionBundle
+*/
+{% if class.namespace is not empty %}
+
+namespace {{ class.namespace }};
+{% endif %}
+
+/**
+ * Class {{ class.name }}.{% if class.description %} {{ class.description | split("\n") | join('\n * ') }}{% endif %}{% if class.authors | length > 0 %}
+
+ *
+{% for author in class.authors %}
+ * @author {{ author | raw }}
+{% endfor %}
+{% else %}
+
+{% endif %}
+ */
+class {{ class.name }}{% if class.extends %} extends {{ class.extends }}{% endif %}
+{% if class.interfaces | length > 0 %}
+
+    implements {% for interface in class.interfaces %}{{ interface }}{{ loop.last ? '' : ',\n               ' }}{% endfor %}
+{% endif %}
+
+{
+{% if class.traits | length > 0 %}
+    use {% for traitName in class.traits %}{{ traitName }}{{ loop.last ? ';' : ',\n        ' }}{% endfor %}
+
+{% if class.properties | length > 0 or class.methods | length > 0%}
+
+{% endif %}
+{% endif %}
+{% for property in class.properties %}
+{% if not loop.first %}
+
+{% endif %}
+{{ include('ThuataIntercessionBundle:Templates:IntercessionProperty.php.twig', { property : property }) }}
+{% endfor %}
+{% if class.properties | length > 0 and class.methods | length > 0%}
+
+{% endif %}
+{% for method in class.methods %}
+{% if not loop.first %}
+
+{% endif %}
+    {{ include('ThuataIntercessionBundle:Templates:IntercessionMethod.php.twig', { method : method }) }}
+{% endfor %}
+}

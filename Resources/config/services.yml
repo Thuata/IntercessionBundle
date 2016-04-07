@@ -1,0 +1,4 @@
+services:
+    thuata_intercession.generator:
+        class: Thuata\IntercessionBundle\Service\GeneratorService
+        arguments: ["@twig"]

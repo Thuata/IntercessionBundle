@@ -1,0 +1,10 @@
+    /**
+{% if property.description %}
+     * {{ property.description }}
+{% if property.type %}
+     *
+{% endif %}
+{% endif %}
+     * @var {{ property.type ? property.type : 'mixed' }} ${{ property.name }}
+     */
+    {% include('ThuataIntercessionBundle:Templates/IntercessionProperty:propertry-definition.php.twig') %};
