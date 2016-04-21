@@ -7,6 +7,12 @@
 
 namespace {{ class.namespace }};
 {% endif %}
+{% if class.uses | length > 0 %}
+
+{% for use, alias in class.uses %}
+use {{ use }}{{ alias ?: '' }};
+{% endfor %}
+{% endif %}
 
 /**
  * Class {{ class.name }}.{% if class.description %} {{ class.description | split("\n") | join('\n * ') }}{% endif %}{% if class.authors | length > 0 %}

@@ -34,7 +34,7 @@ namespace Thuata\IntercessionBundle\Exception;
  */
 class NotWritableException extends \Exception
 {
-    const MESSAGE = 'File "%s" is not writable.';
+    const MESSAGE = 'File or dir "%s" is not writable.';
     const CODE = 500;
 
     /**

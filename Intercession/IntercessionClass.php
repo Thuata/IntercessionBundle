@@ -27,6 +27,9 @@ namespace Thuata\IntercessionBundle\Intercession;
 
 use Thuata\IntercessionBundle\Exception\AuthorNoDataException;
 use Thuata\IntercessionBundle\Exception\AuthorWrongTypeException;
+use Thuata\IntercessionBundle\Exception\DuplicateUseFirstWithoutAliasException;
+use Thuata\IntercessionBundle\Exception\DuplicateUseWithAliasException;
+use Thuata\IntercessionBundle\Exception\InvalidNamespaceException;
 use Thuata\IntercessionBundle\Intercession\IntercessionVar\IntercessionProperty;
 use Thuata\IntercessionBundle\Interfaces\DescriptableInterface;
 use Thuata\IntercessionBundle\Traits\DescriptableTrait;
@@ -44,6 +47,7 @@ class IntercessionClass implements DescriptableInterface
 
     const ERROR_FORMAT_NON_EXISTANT_INTERFACE = 'Interface "%s" is not defined';
     const FORMAT_AUTHOR = '%s <%s>';
+    const USE_CLASS_EXTRACT_REGEXP = '#^(?P<namespace>([\w_]+\\\)*)(?P<classname>[\w_]+)$#';
 
     /**
      * @var string
@@ -85,6 +89,11 @@ class IntercessionClass implements DescriptableInterface
      */
     private $traits;
 
+    /**
+     * @var array
+     */
+    private $uses;
+
     public function __construct()
     {
         $this->name = null;
@@ -95,6 +104,7 @@ class IntercessionClass implements DescriptableInterface
         $this->extends = null;
         $this->interfaces = [];
         $this->traits = [];
+        $this->uses = [];
     }
 
     /**
@@ -140,6 +150,9 @@ class IntercessionClass implements DescriptableInterface
      */
     public function setNamespace($namespace)
     {
+        if (preg_match(self::USE_CLASS_EXTRACT_REGEXP, $namespace) === 0) {
+            throw new InvalidNamespaceException($namespace);
+        }
         $this->namespace = $namespace;
 
         return $this;
@@ -159,12 +172,16 @@ class IntercessionClass implements DescriptableInterface
      * Sets extends
      *
      * @param string $extends
+     * @param string $alias
      *
      * @return IntercessionClass
+     *
+     * @throws DuplicateUseWithAliasException
      */
-    public function setExtends($extends)
+    public function setExtends($extends, $alias = null)
     {
-        $this->extends = $extends;
+        $this->extends = $this->addUse($extends, $alias);
+
         return $this;
     }
 
@@ -275,10 +292,13 @@ class IntercessionClass implements DescriptableInterface
      * Adds an interface
      *
      * @param string $interfaceName
+     * @param string $alias
+     *
+     * @throws DuplicateUseWithAliasException
      */
-    public function addInterface($interfaceName)
+    public function addInterface($interfaceName, $alias = null)
     {
-        $this->interfaces[] = $interfaceName;
+        $this->interfaces[] = $this->addUse($interfaceName, $alias);
     }
 
     /**
@@ -294,14 +314,102 @@ class IntercessionClass implements DescriptableInterface
     /**
      * Adds a trait
      *
-     * @param $traitName
+     * @param string $traitName
+     * @param string $alias
      *
      * @return IntercessionClass
      */
-    public function addTrait($traitName)
+    public function addTrait($traitName, $alias = null)
     {
-        $this->traits[] = $traitName;
+        $this->traits[] = $this->addUse($traitName, $alias);
 
         return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getUses()
+    {
+        return $this->uses;
+    }
+
+    /**
+     * @param string $use
+     * @param string $alias
+     *
+     * @return string the alias or class name
+     *
+     * @throws DuplicateUseFirstWithoutAliasException
+     * @throws DuplicateUseWithAliasException
+     * @throws InvalidNamespaceException
+     */
+    public function addUse($use, $alias = null)
+    {
+        $this->repairUse($use);
+
+        list($class, $namespace) = $this->extractClassNameFromUse($use);
+
+        if ($namespace === $this->namespace) {
+            return $class;
+        }
+
+        $found = array_key_exists($use, $this->uses) ? $this->uses[$use] : false;
+
+        switch (true) {
+            case $found === $alias : // already used, same alias (or no alias)
+                break;
+            case $found === null : // already used without alias but alias provided
+                throw new DuplicateUseFirstWithoutAliasException($use, $alias);
+            case $found === false : // never used
+                $this->uses[$use] = ($alias !== $class) ? $alias : null;
+                break;
+            default : // already used with different alias
+                throw new DuplicateUseWithAliasException($use, $alias, $found);
+        }
+
+        return $alias ?: $class;
+    }
+
+    /**
+     * Removes leading \ from the use
+     *
+     * @param $use
+     */
+    protected function repairUse(&$use)
+    {
+        if (substr($use, 0, 1) === '\\') {
+            $use = substr($use, 1);
+        }
+    }
+
+    /**
+     * Extracts the class name from a used namespaced class
+     *
+     * @param string $use
+     *
+     * @return mixed
+     *
+     * @throws InvalidNamespaceException
+     */
+    public function extractClassNameFromUse($use)
+    {
+        $matches = [];
+
+        if (preg_match(self::USE_CLASS_EXTRACT_REGEXP, $use, $matches) === 0) {
+            throw new InvalidNamespaceException($use);
+        }
+
+        $className = $matches['classname'];
+        $namespace = array_key_exists('namespace', $matches) ? $matches['namespace'] : '';
+
+        if (substr($namespace, -1, 1) === '\\') {
+            $namespace = substr($namespace, 0, -1);
+        }
+
+        return [
+            $className,
+            $namespace
+        ];
     }
 }

@@ -77,12 +77,17 @@ class GeneratorService
      */
     public function createClassDefinitionFile(IntercessionClass $class, $file)
     {
-        if (!is_file($file)) {
-            throw new NotFileException($file);
+        $dir = dirname($file);
+
+        if (!file_exists($dir)) {
+            mkdir($dir);
         }
-        if (!is_writable($file)) {
-            throw new NotWritableException($file);
+
+        if (!is_writable($dir)) {
+            throw new NotWritableException($dir);
         }
+
+        touch($file);
 
         file_put_contents($file, $this->renderClass($class));
     }

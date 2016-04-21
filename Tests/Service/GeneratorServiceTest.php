@@ -86,7 +86,7 @@ EOL;
         $class = new IntercessionClass();
 
         $class->setName('Foo');
-        $class->setNamespace('Bar/Baz');
+        $class->setNamespace('Bar\Baz');
 
         /** @var GeneratorService $generator */
         $generator = $this->container->get('thuata_intercession.generator');
@@ -98,7 +98,7 @@ EOL;
     see https://github.com/Thuata/IntercessionBundle
 */
 
-namespace Bar/Baz;
+namespace Bar\Baz;
 
 /**
  * Class Foo.
@@ -118,7 +118,7 @@ EOL;
         $class = new IntercessionClass();
 
         $class->setName('Foo');
-        $class->setNamespace('Bar/Baz');
+        $class->setNamespace('Bar\Baz');
         $class->setDescription('The marvelous Foo class !');
 
         /** @var GeneratorService $generator */
@@ -131,7 +131,7 @@ EOL;
     see https://github.com/Thuata/IntercessionBundle
 */
 
-namespace Bar/Baz;
+namespace Bar\Baz;
 
 /**
  * Class Foo. The marvelous Foo class !
@@ -151,7 +151,7 @@ EOL;
         $class = new IntercessionClass();
 
         $class->setName('Foo');
-        $class->setNamespace('Bar/Baz');
+        $class->setNamespace('Bar\Baz');
         $description = <<<EOL
 The marvelous
 wonderfull
@@ -170,7 +170,7 @@ EOL;
     see https://github.com/Thuata/IntercessionBundle
 */
 
-namespace Bar/Baz;
+namespace Bar\Baz;
 
 /**
  * Class Foo. The marvelous
@@ -193,7 +193,7 @@ EOL;
         $class = new IntercessionClass();
 
         $class->setName('Foo');
-        $class->setNamespace('Bar/Baz');
+        $class->setNamespace('Bar\Baz');
         $class->addAuthor('Anthony Maudry', 'anthony.maudry@thuata.com');
 
         /** @var GeneratorService $generator */
@@ -206,7 +206,7 @@ EOL;
     see https://github.com/Thuata/IntercessionBundle
 */
 
-namespace Bar/Baz;
+namespace Bar\Baz;
 
 /**
  * Class Foo.
@@ -228,7 +228,7 @@ EOL;
         $class = new IntercessionClass();
 
         $class->setName('Foo');
-        $class->setNamespace('Bar/Baz');
+        $class->setNamespace('Bar\Baz');
         $class->addAuthor('Anthony Maudry', 'anthony.maudry@thuata.com');
         $class->addAuthor('Gabin Maudry', 'gabin.maudry@thuata.com');
 
@@ -242,7 +242,7 @@ EOL;
     see https://github.com/Thuata/IntercessionBundle
 */
 
-namespace Bar/Baz;
+namespace Bar\Baz;
 
 /**
  * Class Foo.
@@ -265,7 +265,7 @@ EOL;
         $class = new IntercessionClass();
 
         $class->setName('Foo');
-        $class->setNamespace('Bar/Baz');
+        $class->setNamespace('Bar\Baz');
         $class->addAuthor('Anthony Maudry', 'anthony.maudry@thuata.com');
         $class->addAuthor('Gabin Maudry', 'gabin.maudry@thuata.com');
         $description = <<<EOL
@@ -286,7 +286,7 @@ EOL;
     see https://github.com/Thuata/IntercessionBundle
 */
 
-namespace Bar/Baz;
+namespace Bar\Baz;
 
 /**
  * Class Foo. The marvelous
@@ -312,7 +312,7 @@ EOL;
         $class = new IntercessionClass();
 
         $class->setName('Foo');
-        $class->setNamespace('Bar/Baz');
+        $class->setNamespace('Bar\Baz');
         $class->addAuthor('Anthony Maudry', 'anthony.maudry@thuata.com');
         $class->addAuthor('Gabin Maudry', 'gabin.maudry@thuata.com');
         $description = <<<EOL
@@ -334,7 +334,9 @@ EOL;
     see https://github.com/Thuata/IntercessionBundle
 */
 
-namespace Bar/Baz;
+namespace Bar\Baz;
+
+use Bar\AbstractFooBar;
 
 /**
  * Class Foo. The marvelous
@@ -345,7 +347,55 @@ namespace Bar/Baz;
  * @author Anthony Maudry <anthony.maudry@thuata.com>
  * @author Gabin Maudry <gabin.maudry@thuata.com>
  */
-class Foo extends \Bar\AbstractFooBar
+class Foo extends AbstractFooBar
+{
+}
+
+EOL;
+
+
+        $this->assertEquals($expected, $generator->renderClass($class));
+    }
+
+    public function testGeneratorServiceClassExtendsSameNamespace()
+    {
+        $class = new IntercessionClass();
+
+        $class->setName('Foo');
+        $class->setNamespace('Bar\Baz');
+        $class->addAuthor('Anthony Maudry', 'anthony.maudry@thuata.com');
+        $class->addAuthor('Gabin Maudry', 'gabin.maudry@thuata.com');
+        $description = <<<EOL
+The marvelous
+wonderfull
+unbelievable
+Foo class !
+EOL;
+        $class->setDescription($description);
+        $class->setExtends('\Bar\Baz\AbstractFooBar');
+
+        /** @var GeneratorService $generator */
+        $generator = $this->container->get('thuata_intercession.generator');
+
+        $expected = <<<EOL
+<?php
+/*
+    Created by the Thuata's Intercession bundle.
+    see https://github.com/Thuata/IntercessionBundle
+*/
+
+namespace Bar\Baz;
+
+/**
+ * Class Foo. The marvelous
+ * wonderfull
+ * unbelievable
+ * Foo class !
+ *
+ * @author Anthony Maudry <anthony.maudry@thuata.com>
+ * @author Gabin Maudry <gabin.maudry@thuata.com>
+ */
+class Foo extends AbstractFooBar
 {
 }
 
@@ -360,7 +410,7 @@ EOL;
         $class = new IntercessionClass();
 
         $class->setName('Foo');
-        $class->setNamespace('Bar/Baz');
+        $class->setNamespace('Bar\Baz');
         $class->addAuthor('Anthony Maudry', 'anthony.maudry@thuata.com');
         $class->addAuthor('Gabin Maudry', 'gabin.maudry@thuata.com');
         $description = <<<EOL
@@ -382,7 +432,9 @@ EOL;
     see https://github.com/Thuata/IntercessionBundle
 */
 
-namespace Bar/Baz;
+namespace Bar\Baz;
+
+use Bar\FooBarInterface;
 
 /**
  * Class Foo. The marvelous
@@ -394,7 +446,7 @@ namespace Bar/Baz;
  * @author Gabin Maudry <gabin.maudry@thuata.com>
  */
 class Foo
-    implements \Bar\FooBarInterface
+    implements FooBarInterface
 {
 }
 
@@ -409,7 +461,7 @@ EOL;
         $class = new IntercessionClass();
 
         $class->setName('Foo');
-        $class->setNamespace('Bar/Baz');
+        $class->setNamespace('Bar\Baz');
         $class->addAuthor('Anthony Maudry', 'anthony.maudry@thuata.com');
         $class->addAuthor('Gabin Maudry', 'gabin.maudry@thuata.com');
         $description = <<<EOL
@@ -432,7 +484,10 @@ EOL;
     see https://github.com/Thuata/IntercessionBundle
 */
 
-namespace Bar/Baz;
+namespace Bar\Baz;
+
+use Bar\FooBarInterface;
+use Bar\BarFooInterface;
 
 /**
  * Class Foo. The marvelous
@@ -444,8 +499,8 @@ namespace Bar/Baz;
  * @author Gabin Maudry <gabin.maudry@thuata.com>
  */
 class Foo
-    implements \Bar\FooBarInterface,
-               \Bar\BarFooInterface
+    implements FooBarInterface,
+               BarFooInterface
 {
 }
 
@@ -460,7 +515,7 @@ EOL;
         $class = new IntercessionClass();
 
         $class->setName('Foo');
-        $class->setNamespace('Bar/Baz');
+        $class->setNamespace('Bar\Baz');
         $class->addAuthor('Anthony Maudry', 'anthony.maudry@thuata.com');
         $class->addAuthor('Gabin Maudry', 'gabin.maudry@thuata.com');
         $description = <<<EOL
@@ -484,7 +539,11 @@ EOL;
     see https://github.com/Thuata/IntercessionBundle
 */
 
-namespace Bar/Baz;
+namespace Bar\Baz;
+
+use Bar\FooBarInterface;
+use Bar\BarFooInterface;
+use Bar\AbstractFooBar;
 
 /**
  * Class Foo. The marvelous
@@ -495,9 +554,9 @@ namespace Bar/Baz;
  * @author Anthony Maudry <anthony.maudry@thuata.com>
  * @author Gabin Maudry <gabin.maudry@thuata.com>
  */
-class Foo extends \Bar\AbstractFooBar
-    implements \Bar\FooBarInterface,
-               \Bar\BarFooInterface
+class Foo extends AbstractFooBar
+    implements FooBarInterface,
+               BarFooInterface
 {
 }
 
@@ -512,7 +571,7 @@ EOL;
         $class = new IntercessionClass();
 
         $class->setName('Foo');
-        $class->setNamespace('Bar/Baz');
+        $class->setNamespace('Bar\Baz');
         $class->addAuthor('Anthony Maudry', 'anthony.maudry@thuata.com');
         $class->addAuthor('Gabin Maudry', 'gabin.maudry@thuata.com');
         $description = <<<EOL
@@ -537,7 +596,12 @@ EOL;
     see https://github.com/Thuata/IntercessionBundle
 */
 
-namespace Bar/Baz;
+namespace Bar\Baz;
+
+use Bar\FooBarInterface;
+use Bar\BarFooInterface;
+use Bar\FooBarTrait;
+use Bar\AbstractFooBar;
 
 /**
  * Class Foo. The marvelous
@@ -548,11 +612,11 @@ namespace Bar/Baz;
  * @author Anthony Maudry <anthony.maudry@thuata.com>
  * @author Gabin Maudry <gabin.maudry@thuata.com>
  */
-class Foo extends \Bar\AbstractFooBar
-    implements \Bar\FooBarInterface,
-               \Bar\BarFooInterface
+class Foo extends AbstractFooBar
+    implements FooBarInterface,
+               BarFooInterface
 {
-    use \Bar\FooBarTrait;
+    use FooBarTrait;
 }
 
 EOL;
@@ -566,7 +630,7 @@ EOL;
         $class = new IntercessionClass();
 
         $class->setName('Foo');
-        $class->setNamespace('Bar/Baz');
+        $class->setNamespace('Bar\Baz');
         $class->addAuthor('Anthony Maudry', 'anthony.maudry@thuata.com');
         $class->addAuthor('Gabin Maudry', 'gabin.maudry@thuata.com');
         $description = <<<EOL
@@ -592,7 +656,13 @@ EOL;
     see https://github.com/Thuata/IntercessionBundle
 */
 
-namespace Bar/Baz;
+namespace Bar\Baz;
+
+use Bar\FooBarInterface;
+use Bar\BarFooInterface;
+use Bar\FooBarTrait;
+use Bar\BarFooTrait;
+use Bar\AbstractFooBar;
 
 /**
  * Class Foo. The marvelous
@@ -603,12 +673,12 @@ namespace Bar/Baz;
  * @author Anthony Maudry <anthony.maudry@thuata.com>
  * @author Gabin Maudry <gabin.maudry@thuata.com>
  */
-class Foo extends \Bar\AbstractFooBar
-    implements \Bar\FooBarInterface,
-               \Bar\BarFooInterface
+class Foo extends AbstractFooBar
+    implements FooBarInterface,
+               BarFooInterface
 {
-    use \Bar\FooBarTrait,
-        \Bar\BarFooTrait;
+    use FooBarTrait,
+        BarFooTrait;
 }
 
 EOL;
@@ -1204,7 +1274,7 @@ EOL;
         $class = new IntercessionClass();
 
         $class->setName('Foo');
-        $class->setNamespace('Bar/Baz');
+        $class->setNamespace('Bar\Baz');
         $class->addAuthor('Anthony Maudry', 'anthony.maudry@thuata.com');
         $class->addAuthor('Gabin Maudry', 'gabin.maudry@thuata.com');
         $description = <<<EOL
@@ -1286,7 +1356,13 @@ EOL;
     see https://github.com/Thuata/IntercessionBundle
 */
 
-namespace Bar/Baz;
+namespace Bar\Baz;
+
+use Bar\FooBarInterface;
+use Bar\BarFooInterface;
+use Bar\FooBarTrait;
+use Bar\BarFooTrait;
+use Bar\AbstractFooBar;
 
 /**
  * Class Foo. The marvelous
@@ -1297,12 +1373,12 @@ namespace Bar/Baz;
  * @author Anthony Maudry <anthony.maudry@thuata.com>
  * @author Gabin Maudry <gabin.maudry@thuata.com>
  */
-class Foo extends \Bar\AbstractFooBar
-    implements \Bar\FooBarInterface,
-               \Bar\BarFooInterface
+class Foo extends AbstractFooBar
+    implements FooBarInterface,
+               BarFooInterface
 {
-    use \Bar\FooBarTrait,
-        \Bar\BarFooTrait;
+    use FooBarTrait,
+        BarFooTrait;
 
     /**
      * @var \\FooBar \$bar
