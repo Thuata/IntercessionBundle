@@ -31,7 +31,7 @@ class DuplicateUseWithAliasException extends \Exception
      * @param string $alias
      * @param string $found
      */
-    public function __construct($use, $alias, $found)
+    public function __construct(string $use, string $alias, string $found)
     {
         parent::__construct(sprintf(self::MESSAGES_FORMAT, $use, $alias, $found), self::ERROR_CODE);
     }

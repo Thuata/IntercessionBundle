@@ -80,7 +80,7 @@ class IntercessionVar implements DescriptableInterface
      * @param string $name
      * @return IntercessionVar
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -103,7 +103,7 @@ class IntercessionVar implements DescriptableInterface
      * @param string $type
      * @return IntercessionVar
      */
-    public function setType($type)
+    public function setType(string $type)
     {
         $this->type = $type;
 
@@ -127,7 +127,7 @@ class IntercessionVar implements DescriptableInterface
      *
      * @return IntercessionVar
      */
-    public function setInitilisation($initialisation)
+    public function setInitilisation(string $initialisation)
     {
         $this->initilisation = $initialisation;
 

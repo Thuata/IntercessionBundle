@@ -52,7 +52,7 @@ trait VisibilityableTrait
      *
      * @throws \Exception
      */
-    public function setVisibility($visibility)
+    public function setVisibility(string $visibility)
     {
         if (!in_array($visibility, self::VISIBILITY_ALLOWED)) {
             throw new \Exception(sprintf(self::ERROR_FORMAT_INVALID_VISIBILITY, $visibility));

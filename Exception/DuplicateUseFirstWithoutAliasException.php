@@ -30,7 +30,7 @@ class DuplicateUseFirstWithoutAliasException extends \Exception
      * @param string $use
      * @param string $alias
      */
-    public function __construct($use, $alias)
+    public function __construct(string $use, string $alias)
     {
         parent::__construct(sprintf(self::MESSAGES_FORMAT, $use, $alias), self::ERROR_CODE);
     }

@@ -48,5 +48,5 @@ interface DescriptableInterface
      *
      * @return DescriptableInterface
      */
-    public function setDescription($description);
+    public function setDescription(string $description);
 }

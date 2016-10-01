@@ -56,5 +56,5 @@ interface VisibilityableInterface
      *
      * @throws \Exception
      */
-    public function setVisibility($visibility);
+    public function setVisibility(string $visibility);
 }

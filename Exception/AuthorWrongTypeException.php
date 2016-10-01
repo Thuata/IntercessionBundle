@@ -43,7 +43,7 @@ class AuthorWrongTypeException extends \Exception
      * @param string $name
      * @param string $email
      */
-    public function __construct($name, $email)
+    public function __construct(string $name, string $email)
     {
         parent::__construct(sprintf(self::MESSAGE, gettype($name), gettype($email)), self::CODE, null);
     }
