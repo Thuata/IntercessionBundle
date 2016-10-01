@@ -29,7 +29,7 @@ class InvalidNamespaceException extends \Exception
      *
      * @param string $use
      */
-    public function __construct($use)
+    public function __construct(string $use)
     {
         parent::__construct(sprintf(self::MESSAGE_FORMAT, $use), self::CODE, null);
     }

@@ -124,7 +124,7 @@ class IntercessionClass implements DescriptableInterface
      *
      * @return IntercessionClass
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -146,9 +146,10 @@ class IntercessionClass implements DescriptableInterface
      *
      * @param string $namespace
      *
-     * @return IntercessionClass
+     * @return \Thuata\IntercessionBundle\Intercession\IntercessionClass
+     * @throws \Thuata\IntercessionBundle\Exception\InvalidNamespaceException
      */
-    public function setNamespace($namespace)
+    public function setNamespace(string $namespace)
     {
         if (preg_match(self::USE_CLASS_EXTRACT_REGEXP, $namespace) === 0) {
             throw new InvalidNamespaceException($namespace);
@@ -178,7 +179,7 @@ class IntercessionClass implements DescriptableInterface
      *
      * @throws DuplicateUseWithAliasException
      */
-    public function setExtends($extends, $alias = null)
+    public function setExtends(string $extends, string $alias = null)
     {
         $this->extends = $this->addUse($extends, $alias);
 
@@ -206,7 +207,7 @@ class IntercessionClass implements DescriptableInterface
      * @throws AuthorNoDataException
      * @throws AuthorWrongTypeException
      */
-    public function addAuthor($name = null, $email = null)
+    public function addAuthor(string $name = null, string $email = null)
     {
         is_null($name) and $name = '';
         is_null($email) and $email = '';
@@ -296,7 +297,7 @@ class IntercessionClass implements DescriptableInterface
      *
      * @throws DuplicateUseWithAliasException
      */
-    public function addInterface($interfaceName, $alias = null)
+    public function addInterface(string $interfaceName, string $alias = null)
     {
         $this->interfaces[] = $this->addUse($interfaceName, $alias);
     }
@@ -319,7 +320,7 @@ class IntercessionClass implements DescriptableInterface
      *
      * @return IntercessionClass
      */
-    public function addTrait($traitName, $alias = null)
+    public function addTrait(string $traitName, string $alias = null)
     {
         $this->traits[] = $this->addUse($traitName, $alias);
 
@@ -344,7 +345,7 @@ class IntercessionClass implements DescriptableInterface
      * @throws DuplicateUseWithAliasException
      * @throws InvalidNamespaceException
      */
-    public function addUse($use, $alias = null)
+    public function addUse(string $use, string $alias = null)
     {
         $this->repairUse($use);
 
@@ -374,9 +375,9 @@ class IntercessionClass implements DescriptableInterface
     /**
      * Removes leading \ from the use
      *
-     * @param $use
+     * @param string $use
      */
-    protected function repairUse(&$use)
+    protected function repairUse(string &$use)
     {
         if (substr($use, 0, 1) === '\\') {
             $use = substr($use, 1);
@@ -392,7 +393,7 @@ class IntercessionClass implements DescriptableInterface
      *
      * @throws InvalidNamespaceException
      */
-    public function extractClassNameFromUse($use)
+    public function extractClassNameFromUse(string $use)
     {
         $matches = [];
 

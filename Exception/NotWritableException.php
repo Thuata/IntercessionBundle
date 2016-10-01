@@ -42,7 +42,7 @@ class NotWritableException extends \Exception
      *
      * @param string $file
      */
-    public function __construct($file)
+    public function __construct(string $file)
     {
         parent::__construct(sprintf(self::MESSAGE, $file), self::CODE, null);
     }

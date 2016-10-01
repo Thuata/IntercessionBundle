@@ -90,7 +90,7 @@ class IntercessionMethod implements VisibilityableInterface, DescriptableInterfa
      *
      * @return IntercessionMethod
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
 
@@ -114,7 +114,7 @@ class IntercessionMethod implements VisibilityableInterface, DescriptableInterfa
      *
      * @return IntercessionMethod
      */
-    public function setBody($body)
+    public function setBody(string $body)
     {
         $this->body = $body;
 
@@ -138,7 +138,7 @@ class IntercessionMethod implements VisibilityableInterface, DescriptableInterfa
      *
      * @return IntercessionMethod
      */
-    public function setTypeReturned($typeReturned)
+    public function setTypeReturned(string $typeReturned)
     {
         $this->typeReturned = $typeReturned;
 
