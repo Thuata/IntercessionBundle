@@ -14,7 +14,7 @@
         "psr-4": { "Thuata\\IntercessionBundle\\": "" }
     },
     "require": {
-        "php": ">=5.5",
+        "php": "~7.1",
         "symfony/symfony": ">=2.7",
         "thuata/componentBundle" : "dev-master",
         "incenteev/composer-parameter-handler": "~2.0"
