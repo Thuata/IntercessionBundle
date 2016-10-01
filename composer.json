@@ -16,7 +16,7 @@
     "require": {
         "php": ">=5.5",
         "symfony/symfony": ">=2.7",
-        "thuata/componentBundle" : ">=1.0",
+        "thuata/componentBundle" : "dev-master",
         "incenteev/composer-parameter-handler": "~2.0"
     },
     "require-dev": {
