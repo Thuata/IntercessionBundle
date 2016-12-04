@@ -1,5 +1,7 @@
 # Intercession Bundle
 
+[![Build Status](https://travis-ci.org/Thuata/IntercessionBundle.svg?branch=v1.0)](https://travis-ci.org/Thuata/IntercessionBundle)
+
 ## Intercession principle
 
 Intercession is the ability of a program to modify its own execution state. That mean intercession allows to generate and execute some code in live during the program execution.
