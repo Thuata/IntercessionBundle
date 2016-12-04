@@ -18,24 +18,21 @@ Being aware of that intercession can be a very powerfull tool.
 
 In your composer.json file add the following lines :
 
-```js
+```json
 {
-    // ...
     "require": {
       // ...
-        "thuata/intercessionbundle": ">=1.0",
+        "thuata/intercessionbundle": "^1",
       // ...
-    },
-    // ...
-    "repositories" : [ // that section provides access to vcs repositories
-        {
-            "type" : "git",
-            "url" : "git@github.com:Thuata/IntercessionBundle.git"
-        }//,
-        // ... eventually other repoitories needed
-    ]
+    }
 }
 
+```
+
+or directly with composer on command line :
+
+```bash
+composer require thuata/intercessionbundle
 ```
 
 This command requires you to have Composer installed globally, as explained
