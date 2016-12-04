@@ -25,7 +25,6 @@
 
 namespace Thuata\IntercessionBundle\Service;
 
-use Thuata\IntercessionBundle\Exception\NotFileException;
 use Thuata\IntercessionBundle\Exception\NotWritableException;
 use Thuata\IntercessionBundle\Intercession\IntercessionClass;
 
@@ -80,7 +79,11 @@ class GeneratorService
         $dir = dirname($file);
 
         if (!file_exists($dir)) {
+            set_error_handler(function() use ($dir) {
+                throw new NotWritableException($dir);
+            });
             mkdir($dir);
+            restore_error_handler();
         }
 
         if (!is_writable($dir)) {

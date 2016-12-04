@@ -1,0 +1,7 @@
+
+.gitignore
+.idea/
+Tests/var/
+composer.lock
+vendor/
+coverage/

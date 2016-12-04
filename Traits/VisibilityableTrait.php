@@ -54,8 +54,8 @@ trait VisibilityableTrait
      */
     public function setVisibility(string $visibility)
     {
-        if (!in_array($visibility, self::VISIBILITY_ALLOWED)) {
-            throw new \Exception(sprintf(self::ERROR_FORMAT_INVALID_VISIBILITY, $visibility));
+        if (!in_array($visibility, VisibilityableInterface::VISIBILITY_ALLOWED)) {
+            throw new \Exception(sprintf(VisibilityableInterface::ERROR_FORMAT_INVALID_VISIBILITY, $visibility));
         }
         $this->visibility = $visibility;
 

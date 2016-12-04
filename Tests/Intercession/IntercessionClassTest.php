@@ -95,24 +95,63 @@ class IntercessionClassTest extends \PHPUnit_Framework_TestCase
     /**
      * Test for author with name and email
      *
-     * @expectedException \Thuata\IntercessionBundle\Exception\AuthorWrongTypeException
+     * @expectedException \Thuata\IntercessionBundle\Exception\InvalidNamespaceException
      */
-    public function testAddIntercessionClassAuthorWrongName()
+    public function testAddNamespaceWrongFormat()
     {
         $class = new IntercessionClass();
 
-        $class->addAuthor(2, 'anthony.maudry@thuata.com');
+        $class->setNamespace('foo/bar');
     }
 
     /**
      * Test for author with name and email
      *
-     * @expectedException \Thuata\IntercessionBundle\Exception\AuthorWrongTypeException
+     * @expectedException \Thuata\IntercessionBundle\Exception\InvalidNamespaceException
      */
-    public function testAddIntercessionClassAuthorWrongEmail()
+    public function testAddUserWrongFormat()
     {
         $class = new IntercessionClass();
 
-        $class->addAuthor('Anthony Maudry', 3);
+        $class->addUse('foo/bar');
+    }
+
+    /**
+     * Test for author with name and email
+     *
+     * @expectedException \Thuata\IntercessionBundle\Exception\DuplicateUseFirstWithoutAliasException
+     */
+    public function testAddUseWithDuplicateUseFirstWithoutAliasException()
+    {
+        $class = new IntercessionClass();
+
+        $class->addUse('\\Test\Testing');
+        $class->addUse('\\Test\Testing', 'Testing');
+    }
+
+    /**
+     * Test for author with name and email
+     *
+     * @expectedException \Thuata\IntercessionBundle\Exception\DuplicateUseWithAliasException
+     */
+    public function testAddUseWithDuplicateAlias()
+    {
+        $class = new IntercessionClass();
+
+        $class->addUse('\\Test\Testing', 'Foo');
+        $class->addUse('\\Test\Testing', 'Bar');
+    }
+
+    /**
+     * Test for author with name and email
+     */
+    public function testAddUseWithDuplicate()
+    {
+        $class = new IntercessionClass();
+
+        $class->addUse('\\Test\Testing');
+        $class->addUse('\\Test\Testing');
+
+        $this->assertEquals(1, count($class->getUses()));
     }
 }
