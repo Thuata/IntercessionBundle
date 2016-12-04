@@ -205,16 +205,11 @@ class IntercessionClass implements DescriptableInterface
      * @return IntercessionClass
      *
      * @throws AuthorNoDataException
-     * @throws AuthorWrongTypeException
      */
     public function addAuthor(string $name = null, string $email = null)
     {
         is_null($name) and $name = '';
         is_null($email) and $email = '';
-
-        if (!is_string($name) or !is_string($email)) {
-            throw new AuthorWrongTypeException($name, $email);
-        }
 
         if (empty($name) and empty($email)) {
             throw new AuthorNoDataException();

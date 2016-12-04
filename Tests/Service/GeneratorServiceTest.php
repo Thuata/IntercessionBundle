@@ -27,9 +27,11 @@ namespace Thuata\IntercessionBundle\Tests\Service;
 
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Thuata\IntercessionBundle\Intercession\IntercessionClass;
 use Thuata\IntercessionBundle\Intercession\IntercessionMethod;
 use Thuata\IntercessionBundle\Intercession\IntercessionVar;
+use Thuata\IntercessionBundle\Interfaces\VisibilityableInterface;
 use Thuata\IntercessionBundle\Service\GeneratorService;
 
 /**
@@ -1433,5 +1435,125 @@ EOL;
 
 
         $this->assertEquals($expected, $generator->renderClass($class));
+    }
+
+    public function testGeneratorServiceFileWritten()
+    {
+        $class = new IntercessionClass();
+
+        $class->setName('Foo');
+
+        /** @var GeneratorService $generator */
+        $generator = $this->container->get('thuata_intercession.generator');
+
+        $expected = <<<EOL
+<?php
+/*
+    Created by the Thuata's Intercession bundle.
+    see https://github.com/Thuata/IntercessionBundle
+*/
+
+/**
+ * Class Foo.
+ */
+class Foo
+{
+}
+
+EOL;
+        /** @var Bundle $bundle */
+        $bundle = $this->container->get('kernel')->getBundle('ThuataIntercessionBundle');
+        $fileName = $bundle->getPath() . '/Tests/var/test/foo.php';
+        $generator->createClassDefinitionFile($class, $fileName);
+
+        $this->assertTrue(file_exists($fileName));
+        $this->assertEquals($expected, file_get_contents($fileName));
+
+        unlink($fileName);
+        rmdir(dirname($fileName));
+    }
+
+    /**
+     * testGeneratorServiceDirNotWritable
+     *
+     * @expectedException \Thuata\IntercessionBundle\Exception\NotWritableException
+     */
+    public function testGeneratorServiceDirNotCreatable()
+    {
+        $class = new IntercessionClass();
+
+        $class->setName('Foo');
+
+        /** @var GeneratorService $generator */
+        $generator = $this->container->get('thuata_intercession.generator');
+
+        $expected = <<<EOL
+<?php
+/*
+    Created by the Thuata's Intercession bundle.
+    see https://github.com/Thuata/IntercessionBundle
+*/
+
+/**
+ * Class Foo.
+ */
+class Foo
+{
+}
+
+EOL;
+        /** @var Bundle $bundle */
+        $fileName = '/foo/bar';
+        $generator->createClassDefinitionFile($class, $fileName);
+    }
+
+    /**
+     * testGeneratorServiceDirNotWritable
+     *
+     * @expectedException \Thuata\IntercessionBundle\Exception\NotWritableException
+     */
+    public function testGeneratorServiceDirNotWritable()
+    {
+        $class = new IntercessionClass();
+
+        $class->setName('Foo');
+
+        /** @var GeneratorService $generator */
+        $generator = $this->container->get('thuata_intercession.generator');
+
+        $expected = <<<EOL
+<?php
+/*
+    Created by the Thuata's Intercession bundle.
+    see https://github.com/Thuata/IntercessionBundle
+*/
+
+/**
+ * Class Foo.
+ */
+class Foo
+{
+}
+
+EOL;
+        /** @var Bundle $bundle */
+        $fileName = '/root/test.php';
+        $generator->createClassDefinitionFile($class, $fileName);
+    }
+
+    /**
+     * testGeneratorServiceDirNotWritable
+     *
+     * @expectedException \Exception
+     */
+    public function testGeneratorServiceWrongVisibility()
+    {
+        $this->expectExceptionMessage(sprintf(VisibilityableInterface::ERROR_FORMAT_INVALID_VISIBILITY, 'foo'));
+        $class = new IntercessionClass();
+
+        $class->setName('Foo');
+
+        $method = new IntercessionMethod();
+        $method->setVisibility('foo');
     }
 }
