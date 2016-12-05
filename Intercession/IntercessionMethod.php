@@ -61,6 +61,16 @@ class IntercessionMethod implements VisibilityableInterface, DescriptableInterfa
     private $typeReturned;
 
     /**
+     * @var bool
+     */
+    private $strongTypeReturned;
+
+    /**
+     * @var bool
+     */
+    private $nullableStrongTypeReturned;
+
+    /**
      * IntercessionMethod constructor.
      */
     public function __construct()
@@ -167,5 +177,39 @@ class IntercessionMethod implements VisibilityableInterface, DescriptableInterfa
         $this->parameters[] = $parameter;
 
         return $this;
+    }
+
+    /**
+     * Gets strongTypeReturned
+     *
+     * @return boolean
+     */
+    public function isStrongTypeReturned(): bool
+    {
+        return $this->strongTypeReturned;
+    }
+
+    /**
+     * Sets strongTypeReturned
+     *
+     * @param boolean $strongTypeReturned
+     *
+     * @return IntercessionMethod
+     */
+    public function setStrongTypeReturned(bool $strongTypeReturned): IntercessionMethod
+    {
+        $this->strongTypeReturned = $strongTypeReturned;
+
+        return $this;
+    }
+
+    /**
+     * Gets nullableStrongTypeReturned
+     *
+     * @return boolean
+     */
+    public function isNullableStrongTypeReturned(): bool
+    {
+        return $this->nullableStrongTypeReturned;
     }
 }
