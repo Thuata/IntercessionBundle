@@ -1306,7 +1306,7 @@ EOF;
 
         $methodBar->setBody($body);
         $methodBar->setDescription('Wonderfull Baz method');
-        $methodBar->setTypeReturned('boolean');
+        $methodBar->setTypeReturned('bool');
         $methodBar->setVisibility(IntercessionMethod::VISIBILITY_PRIVATE);
         $barFirstParam = new IntercessionVar();
         $barFirstParam->setName('barFirst');
@@ -1333,6 +1333,8 @@ EOL;
         $bazParam->setName('baz');
         $bazParam->setType('string');
         $methodBaz->addParameter($bazParam);
+        $methodBaz->setTypeReturned('bool');
+        $methodBaz->setDeclaredTypeReturned(true);
         $class->addMethod($methodBaz);
 
         $barProperty = new IntercessionVar\IntercessionProperty();
@@ -1398,7 +1400,7 @@ class Foo extends AbstractFooBar
      * @param integer \$barFirst
      * @param \\Bar \$barSecond
      *
-     * @return boolean
+     * @return bool
      */
     private function getBar(\$barFirst, \\Bar \$barSecond = null)
     {
@@ -1418,8 +1420,10 @@ class Foo extends AbstractFooBar
      * Baz Method
      *
      * @param string \$baz
+     *
+     * @return bool
      */
-    public function getBaz(\$baz)
+    public function getBaz(\$baz): bool
     {
         \$var = 3;
         

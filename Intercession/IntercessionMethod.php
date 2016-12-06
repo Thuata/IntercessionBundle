@@ -25,6 +25,7 @@
 
 namespace Thuata\IntercessionBundle\Intercession;
 
+use Thuata\IntercessionBundle\Exception\InvalidTypeForDeclaredTypeReturned;
 use Thuata\IntercessionBundle\Interfaces\DescriptableInterface;
 use Thuata\IntercessionBundle\Interfaces\VisibilityableInterface;
 use Thuata\IntercessionBundle\Traits\DescriptableTrait;
@@ -40,6 +41,9 @@ use Thuata\IntercessionBundle\Traits\VisibilityableTrait;
 class IntercessionMethod implements VisibilityableInterface, DescriptableInterface
 {
     use VisibilityableTrait, DescriptableTrait;
+
+    const REGEXP_RETURNABLETYPE = '#^(string|int|float|bool|callable|array|self|(?<class>(\\\\[a-zA-Z_][a-zA-Z0-9_]*)+))$#';
+
     /**
      * @var string
      */
@@ -63,7 +67,7 @@ class IntercessionMethod implements VisibilityableInterface, DescriptableInterfa
     /**
      * @var bool
      */
-    private $strongTypeReturned;
+    private $declaredTypeReturned;
 
     /**
      * @var bool
@@ -152,6 +156,8 @@ class IntercessionMethod implements VisibilityableInterface, DescriptableInterfa
     {
         $this->typeReturned = $typeReturned;
 
+        $this->validateDeclaredTypeReturned();
+
         return $this;
     }
 
@@ -184,9 +190,9 @@ class IntercessionMethod implements VisibilityableInterface, DescriptableInterfa
      *
      * @return boolean
      */
-    public function isStrongTypeReturned(): bool
+    public function isDeclaredTypeReturned(): bool
     {
-        return $this->strongTypeReturned;
+        return (bool) $this->declaredTypeReturned;
     }
 
     /**
@@ -196,9 +202,10 @@ class IntercessionMethod implements VisibilityableInterface, DescriptableInterfa
      *
      * @return IntercessionMethod
      */
-    public function setStrongTypeReturned(bool $strongTypeReturned): IntercessionMethod
+    public function setDeclaredTypeReturned(bool $strongTypeReturned): IntercessionMethod
     {
-        $this->strongTypeReturned = $strongTypeReturned;
+        $this->declaredTypeReturned = $strongTypeReturned;
+        $this->validateDeclaredTypeReturned();
 
         return $this;
     }
@@ -211,5 +218,16 @@ class IntercessionMethod implements VisibilityableInterface, DescriptableInterfa
     public function isNullableStrongTypeReturned(): bool
     {
         return $this->nullableStrongTypeReturned;
+    }
+
+    private function validateDeclaredTypeReturned()
+    {
+        if ($this->declaredTypeReturned and !empty($this->typeReturned)) {
+            if(preg_match(self::REGEXP_RETURNABLETYPE, $this->typeReturned) === 1) {
+                return true;
+            }
+
+            throw new InvalidTypeForDeclaredTypeReturned($this->typeReturned);
+        }
     }
 }

@@ -34,8 +34,56 @@ class IntercessionMethodTest extends \PHPUnit_Framework_TestCase
 
         $method->setTypeReturned('string');
 
-        $method->setStrongTypeReturned(true);
+        $method->setDeclaredTypeReturned(true);
 
-        $this->assertEquals('string', $method->isStrongTypeReturned());
+        $this->assertTrue($method->isDeclaredTypeReturned());
+    }
+    /**
+     * testStrongTypeReturned
+     */
+    public function testStrongTypeReturnedNoException()
+    {
+        $method = new IntercessionMethod();
+
+        $method->setDeclaredTypeReturned(true);
+
+        $method->setTypeReturned('string');
+        $method->setTypeReturned('int');
+        $method->setTypeReturned('bool');
+        $method->setTypeReturned('float');
+        $method->setTypeReturned('callable');
+        $method->setTypeReturned('array');
+        $method->setTypeReturned('self');
+        $method->setTypeReturned('\Some');
+
+        $this->assertTrue($method->isDeclaredTypeReturned());
+    }
+
+    /**
+     * testStrongTypeReturned
+     *
+     * @expectedException \Thuata\IntercessionBundle\Exception\InvalidTypeForDeclaredTypeReturned
+     */
+    public function testStrongTypeReturnedNotReturnable()
+    {
+        $method = new IntercessionMethod();
+
+        $method->setTypeReturned('resource');
+
+        $method->setDeclaredTypeReturned(true);
+    }
+
+    /**
+     * testStrongTypeReturned
+     *
+     * @expectedException \Thuata\IntercessionBundle\Exception\InvalidTypeForDeclaredTypeReturned
+     */
+    public function testStrongTypeReturnedNotReturnableAlt()
+    {
+        $method = new IntercessionMethod();
+
+        $method->setDeclaredTypeReturned(true);
+
+        $method->setTypeReturned('resource');
     }
 }
