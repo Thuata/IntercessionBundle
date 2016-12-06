@@ -19,7 +19,11 @@
 {% endif %}
      */
     {% endif %}
-{% if method.visibility %}{{ method.visibility }} function {% endif %}{{ method.name }}({{ include('ThuataIntercessionBundle:Templates/IntercessionMethod:parameters.php.twig') }})
+{% if method.visibility %}{{ method.visibility }} {% endif %}function {{ method.name }}({{ include('ThuataIntercessionBundle:Templates/IntercessionMethod:parameters.php.twig') }}){% if method.declaredTypeReturned %}
+: {% if method.nullableStrongTypeReturned %}?{% endif %}{{ method.typeReturned }}
+{% else %}
+
+{% endif %}
     {{ '{' }}{% if method.body %}
 
         {{ method.body | split("\n") | join('\n        ') | raw }}

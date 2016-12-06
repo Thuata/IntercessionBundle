@@ -1306,7 +1306,7 @@ EOF;
 
         $methodBar->setBody($body);
         $methodBar->setDescription('Wonderfull Baz method');
-        $methodBar->setTypeReturned('boolean');
+        $methodBar->setTypeReturned('bool');
         $methodBar->setVisibility(IntercessionMethod::VISIBILITY_PRIVATE);
         $barFirstParam = new IntercessionVar();
         $barFirstParam->setName('barFirst');
@@ -1333,7 +1333,17 @@ EOL;
         $bazParam->setName('baz');
         $bazParam->setType('string');
         $methodBaz->addParameter($bazParam);
+        $methodBaz->setTypeReturned('bool');
+        $methodBaz->setDeclaredTypeReturned(true);
         $class->addMethod($methodBaz);
+
+        $methodFoo = new IntercessionMethod();
+        $methodFoo->setName('isFoo');
+        $methodFoo->setBody($body);
+        $methodFoo->setDescription($bazDescription);
+        $methodFoo->setTypeReturned('bool');
+        $methodFoo->setDeclaredTypeReturned(true, true);
+        $class->addMethod($methodFoo);
 
         $barProperty = new IntercessionVar\IntercessionProperty();
         $barProperty->setName('bar');
@@ -1398,7 +1408,7 @@ class Foo extends AbstractFooBar
      * @param integer \$barFirst
      * @param \\Bar \$barSecond
      *
-     * @return boolean
+     * @return bool
      */
     private function getBar(\$barFirst, \\Bar \$barSecond = null)
     {
@@ -1418,8 +1428,29 @@ class Foo extends AbstractFooBar
      * Baz Method
      *
      * @param string \$baz
+     *
+     * @return bool
      */
-    public function getBaz(\$baz)
+    public function getBaz(\$baz): bool
+    {
+        \$var = 3;
+        
+        if (\$var > 0) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Wonderfull
+     * Incredible
+     * Amazing
+     * Baz Method
+     *
+     * @return bool
+     */
+    public function isFoo(): ?bool
     {
         \$var = 3;
         
@@ -1555,5 +1586,99 @@ EOL;
 
         $method = new IntercessionMethod();
         $method->setVisibility('foo');
+    }
+
+    public function testGeneratorServiceConstant()
+    {
+        $class = new IntercessionClass();
+
+        $class->setName('Foo');
+        $class->addConstant('FIRST_CONSTANT', '\'First constant\'');
+        $class->addConstant('OTHER_CONSTANT', 2);
+
+        /** @var GeneratorService $generator */
+        $generator = $this->container->get('thuata_intercession.generator');
+
+        $expected = <<<EOL
+<?php
+/*
+    Created by the Thuata's Intercession bundle.
+    see https://github.com/Thuata/IntercessionBundle
+*/
+
+/**
+ * Class Foo.
+ */
+class Foo
+{
+    const FIRST_CONSTANT = 'First constant';
+    const OTHER_CONSTANT = 2;
+}
+
+EOL;
+
+        $this->assertEquals($expected, $generator->renderClass($class));
+    }
+
+    public function testGeneratorServiceClassConstantAfterTrait()
+    {
+        $class = new IntercessionClass();
+
+        $class->setName('Foo');
+        $class->setNamespace('Bar\Baz');
+        $class->addAuthor('Anthony Maudry', 'anthony.maudry@thuata.com');
+        $class->addAuthor('Gabin Maudry', 'gabin.maudry@thuata.com');
+        $description = <<<EOL
+The marvelous
+wonderfull
+unbelievable
+Foo class !
+EOL;
+        $class->setDescription($description);
+        $class->addInterface('\Bar\FooBarInterface');
+        $class->addInterface('\Bar\BarFooInterface');
+        $class->addTrait('\Bar\FooBarTrait');
+        $class->setExtends('\Bar\AbstractFooBar');
+        $class->addConstant('TEST', 2);
+
+        /** @var GeneratorService $generator */
+        $generator = $this->container->get('thuata_intercession.generator');
+
+        $expected = <<<EOL
+<?php
+/*
+    Created by the Thuata's Intercession bundle.
+    see https://github.com/Thuata/IntercessionBundle
+*/
+
+namespace Bar\Baz;
+
+use Bar\FooBarInterface;
+use Bar\BarFooInterface;
+use Bar\FooBarTrait;
+use Bar\AbstractFooBar;
+
+/**
+ * Class Foo. The marvelous
+ * wonderfull
+ * unbelievable
+ * Foo class !
+ *
+ * @author Anthony Maudry <anthony.maudry@thuata.com>
+ * @author Gabin Maudry <gabin.maudry@thuata.com>
+ */
+class Foo extends AbstractFooBar
+    implements FooBarInterface,
+               BarFooInterface
+{
+    use FooBarTrait;
+
+    const TEST = 2;
+}
+
+EOL;
+
+
+        $this->assertEquals($expected, $generator->renderClass($class));
     }
 }

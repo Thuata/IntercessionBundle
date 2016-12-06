@@ -25,6 +25,7 @@
 
 namespace Thuata\IntercessionBundle\Intercession;
 
+use Thuata\IntercessionBundle\Exception\InvalidTypeForDeclaredTypeReturned;
 use Thuata\IntercessionBundle\Interfaces\DescriptableInterface;
 use Thuata\IntercessionBundle\Interfaces\VisibilityableInterface;
 use Thuata\IntercessionBundle\Traits\DescriptableTrait;
@@ -40,6 +41,9 @@ use Thuata\IntercessionBundle\Traits\VisibilityableTrait;
 class IntercessionMethod implements VisibilityableInterface, DescriptableInterface
 {
     use VisibilityableTrait, DescriptableTrait;
+
+    const REGEXP_RETURNABLETYPE = '#^(string|int|float|bool|callable|array|self|(?<class>(\\\\[a-zA-Z_][a-zA-Z0-9_]*)+))$#';
+
     /**
      * @var string
      */
@@ -59,6 +63,16 @@ class IntercessionMethod implements VisibilityableInterface, DescriptableInterfa
      * @var string
      */
     private $typeReturned;
+
+    /**
+     * @var bool
+     */
+    private $declaredTypeReturned;
+
+    /**
+     * @var bool
+     */
+    private $nullableStrongTypeReturned;
 
     /**
      * IntercessionMethod constructor.
@@ -142,6 +156,8 @@ class IntercessionMethod implements VisibilityableInterface, DescriptableInterfa
     {
         $this->typeReturned = $typeReturned;
 
+        $this->validateDeclaredTypeReturned();
+
         return $this;
     }
 
@@ -167,5 +183,54 @@ class IntercessionMethod implements VisibilityableInterface, DescriptableInterfa
         $this->parameters[] = $parameter;
 
         return $this;
+    }
+
+    /**
+     * Gets strongTypeReturned
+     *
+     * @return boolean
+     */
+    public function isDeclaredTypeReturned(): bool
+    {
+        return (bool) $this->declaredTypeReturned;
+    }
+
+    /**
+     * Sets strongTypeReturned
+     *
+     * @param boolean $strongTypeReturned
+     * @param bool    $nullable
+     *
+     * @return IntercessionMethod
+     */
+    public function setDeclaredTypeReturned(bool $strongTypeReturned, bool $nullable = false): IntercessionMethod
+    {
+        $this->declaredTypeReturned = $strongTypeReturned;
+        $this->validateDeclaredTypeReturned();
+
+        $this->nullableStrongTypeReturned = $nullable;
+
+        return $this;
+    }
+
+    /**
+     * Gets nullableStrongTypeReturned
+     *
+     * @return boolean
+     */
+    public function isNullableStrongTypeReturned(): bool
+    {
+        return (bool) $this->nullableStrongTypeReturned;
+    }
+
+    private function validateDeclaredTypeReturned()
+    {
+        if ($this->declaredTypeReturned and !empty($this->typeReturned)) {
+            if(preg_match(self::REGEXP_RETURNABLETYPE, $this->typeReturned) === 1) {
+                return true;
+            }
+
+            throw new InvalidTypeForDeclaredTypeReturned($this->typeReturned);
+        }
     }
 }

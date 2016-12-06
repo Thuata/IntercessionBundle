@@ -35,9 +35,15 @@ class {{ class.name }}{% if class.extends %} extends {{ class.extends }}{% endif
 {% if class.traits | length > 0 %}
     use {% for traitName in class.traits %}{{ traitName }}{{ loop.last ? ';' : ',\n        ' }}{% endfor %}
 
-{% if class.properties | length > 0 or class.methods | length > 0%}
+{% if class.properties | length > 0 or class.methods | length > 0 or class.constants | length > 0 %}
 
 {% endif %}
+{% endif %}
+{% for name, value in class.constants %}
+    const {{ name }} = {{ value | raw }};
+{% endfor %}
+{% if class.constants | length > 0 and (class.properties | length > 0 or class.methods | length > 0)%}
+
 {% endif %}
 {% for property in class.properties %}
 {% if not loop.first %}

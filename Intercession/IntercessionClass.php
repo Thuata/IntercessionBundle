@@ -29,6 +29,7 @@ use Thuata\IntercessionBundle\Exception\AuthorNoDataException;
 use Thuata\IntercessionBundle\Exception\AuthorWrongTypeException;
 use Thuata\IntercessionBundle\Exception\DuplicateUseFirstWithoutAliasException;
 use Thuata\IntercessionBundle\Exception\DuplicateUseWithAliasException;
+use Thuata\IntercessionBundle\Exception\InvalidConstantNameException;
 use Thuata\IntercessionBundle\Exception\InvalidNamespaceException;
 use Thuata\IntercessionBundle\Intercession\IntercessionVar\IntercessionProperty;
 use Thuata\IntercessionBundle\Interfaces\DescriptableInterface;
@@ -48,6 +49,7 @@ class IntercessionClass implements DescriptableInterface
     const ERROR_FORMAT_NON_EXISTANT_INTERFACE = 'Interface "%s" is not defined';
     const FORMAT_AUTHOR = '%s <%s>';
     const USE_CLASS_EXTRACT_REGEXP = '#^(?P<namespace>([\w_]+\\\)*)(?P<classname>[\w_]+)$#';
+    const REGEXP_VALID_CONSTANT = '#^[a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*$#';
 
     /**
      * @var string
@@ -93,6 +95,11 @@ class IntercessionClass implements DescriptableInterface
      * @var array
      */
     private $uses;
+
+    /**
+     * @var array
+     */
+    private $constants;
 
     public function __construct()
     {
@@ -377,6 +384,35 @@ class IntercessionClass implements DescriptableInterface
         if (substr($use, 0, 1) === '\\') {
             $use = substr($use, 1);
         }
+    }
+
+    /**
+     * Adds a constant
+     *
+     * @param $name
+     * @param $value
+     *
+     * @return IntercessionClass
+     */
+    public function addConstant($name, $value): IntercessionClass
+    {
+        if (preg_match(self::REGEXP_VALID_CONSTANT, $name) !== 1) {
+            throw new InvalidConstantNameException($name);
+        }
+
+        $this->constants[$name] = $value;
+
+        return $this;
+    }
+
+    /**
+     * Gets the constants
+     *
+     * @return array
+     */
+    public function getConstants(): array
+    {
+        return $this->constants ?: [];
     }
 
     /**

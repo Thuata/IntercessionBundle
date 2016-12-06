@@ -154,4 +154,40 @@ class IntercessionClassTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(1, count($class->getUses()));
     }
+
+    /**
+     * testAddConstantIvalidChars
+     *
+     * @expectedException \Thuata\IntercessionBundle\Exception\InvalidConstantNameException
+     */
+    public function testAddConstantIvalidCharsFirst()
+    {
+        $class = new IntercessionClass();
+
+        $class->addConstant('2TEST', '\'test\'');
+    }
+
+    /**
+     * testAddConstantIvalidChars
+     *
+     * @expectedException \Thuata\IntercessionBundle\Exception\InvalidConstantNameException
+     */
+    public function testAddConstantIvalidCharsHash()
+    {
+        $class = new IntercessionClass();
+
+        $class->addConstant('TEST_#', '\'test\'');
+    }
+
+    /**
+     * testAddConstantIvalidChars
+     *
+     * @expectedException \Thuata\IntercessionBundle\Exception\InvalidConstantNameException
+     */
+    public function testAddConstantIvalidCharsAntiSlash()
+    {
+        $class = new IntercessionClass();
+
+        $class->addConstant('TEST_\T', '\'test\'');
+    }
 }
