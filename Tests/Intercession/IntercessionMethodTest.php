@@ -86,4 +86,18 @@ class IntercessionMethodTest extends \PHPUnit_Framework_TestCase
 
         $method->setTypeReturned('resource');
     }
+
+    /**
+     * testStrongTypeReturned
+     */
+    public function testNullableStrongTypeReturned()
+    {
+        $method = new IntercessionMethod();
+
+        $method->setDeclaredTypeReturned(true, true);
+
+        $method->setTypeReturned('string');
+
+        $this->assertTrue($method->isNullableStrongTypeReturned());
+    }
 }

@@ -20,7 +20,7 @@
      */
     {% endif %}
 {% if method.visibility %}{{ method.visibility }} {% endif %}function {{ method.name }}({{ include('ThuataIntercessionBundle:Templates/IntercessionMethod:parameters.php.twig') }}){% if method.declaredTypeReturned %}
-: {{ method.typeReturned }}
+: {% if method.nullableStrongTypeReturned %}?{% endif %}{{ method.typeReturned }}
 {% else %}
 
 {% endif %}

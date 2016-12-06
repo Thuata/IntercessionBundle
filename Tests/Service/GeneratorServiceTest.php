@@ -1337,6 +1337,14 @@ EOL;
         $methodBaz->setDeclaredTypeReturned(true);
         $class->addMethod($methodBaz);
 
+        $methodFoo = new IntercessionMethod();
+        $methodFoo->setName('isFoo');
+        $methodFoo->setBody($body);
+        $methodFoo->setDescription($bazDescription);
+        $methodFoo->setTypeReturned('bool');
+        $methodFoo->setDeclaredTypeReturned(true, true);
+        $class->addMethod($methodFoo);
+
         $barProperty = new IntercessionVar\IntercessionProperty();
         $barProperty->setName('bar');
         $barProperty->setType('\\FooBar');
@@ -1424,6 +1432,25 @@ class Foo extends AbstractFooBar
      * @return bool
      */
     public function getBaz(\$baz): bool
+    {
+        \$var = 3;
+        
+        if (\$var > 0) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * Wonderfull
+     * Incredible
+     * Amazing
+     * Baz Method
+     *
+     * @return bool
+     */
+    public function isFoo(): ?bool
     {
         \$var = 3;
         

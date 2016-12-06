@@ -199,13 +199,16 @@ class IntercessionMethod implements VisibilityableInterface, DescriptableInterfa
      * Sets strongTypeReturned
      *
      * @param boolean $strongTypeReturned
+     * @param bool    $nullable
      *
      * @return IntercessionMethod
      */
-    public function setDeclaredTypeReturned(bool $strongTypeReturned): IntercessionMethod
+    public function setDeclaredTypeReturned(bool $strongTypeReturned, bool $nullable = false): IntercessionMethod
     {
         $this->declaredTypeReturned = $strongTypeReturned;
         $this->validateDeclaredTypeReturned();
+
+        $this->nullableStrongTypeReturned = $nullable;
 
         return $this;
     }
@@ -217,7 +220,7 @@ class IntercessionMethod implements VisibilityableInterface, DescriptableInterfa
      */
     public function isNullableStrongTypeReturned(): bool
     {
-        return $this->nullableStrongTypeReturned;
+        return (bool) $this->nullableStrongTypeReturned;
     }
 
     private function validateDeclaredTypeReturned()
