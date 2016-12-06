@@ -109,5 +109,5 @@ A more complete document is coming.
 This version is 1.0. It provides only definition generation.
 
 next steps will provide :
-- A full documentation (v1.0.1)
-- Live edition of classes, even after instanciation. (v1.1)
+- A full documentation
+- Live edition of classes, even after instantiation
