@@ -1,7 +1,7 @@
 # Intercession Bundle
 
 [![Build Status](https://travis-ci.org/Thuata/IntercessionBundle.svg?branch=v1.0)](https://travis-ci.org/Thuata/IntercessionBundle)
-![Codeship](https://codeship.com/projects/211246/status?branch=v1.0)
+![Codeship](https://codeship.com/projects/e93fa890-fa7f-0134-c4b1-72e155b092fd/status?branch=v1.0)
 
 ## Intercession principle
 
